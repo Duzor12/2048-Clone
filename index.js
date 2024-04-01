@@ -40,7 +40,12 @@ const addRandomTwoToGrid = (array) => {
         randCol = Math.floor(Math.random()*4);
     }
 
-    array[randRow][randCol] = 2;  
+    randRef = Math.floor(Math.random()*10);
+    if (randRef > 2) {
+        array[randRow][randCol] = 2;
+    } else {
+        array[randRow][randCol] = 4;
+    }  
 }
 
 const addRandomTwosToGrid = (array) => {
