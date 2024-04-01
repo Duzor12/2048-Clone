@@ -123,7 +123,7 @@ const reset = () => {
 
 } //reset
 
-
+let moveHappened = false;
 
 /* Shifts numbers in grid from 
  * bottom to top.
@@ -140,13 +140,16 @@ const moveDown = () => {
                     array[r][c] = array[r][c] * 2;
                     array[i][c] = 0;
                     merged[r][c] = true;
+                    moveHappened = true;
                 } else if (array[r-1][c] === 0 && array[r][c] !== 0) {
                     array[r-1][c] = array[i][c];
                     array[i][c] = 0;
+                    moveHappened = true;
                     break;
                 } else if (array[r][c] === 0) {
                     array[r][c] = array[i][c];
                     array[i][c] = 0;
+                    moveHappened = true;
                 }
             }
         }
@@ -168,13 +171,16 @@ const moveUp = () => {
                     array[r][c] = array[r][c] * 2;
                     array[i][c] = 0;
                     merged[r][c] = true;
+                    moveHappened = true;
                 } else if (array[r+1][c] === 0 && array[r][c] !== 0) {
                     array[r+1][c] = array[i][c];
                     array[i][c] = 0;
+                    moveHappened = true;
                     break;
                 } else if (array[r][c] === 0) {
                     array[r][c] = array[i][c];
                     array[i][c] = 0;
+                    moveHappened = true;
                 }
             }
         }
@@ -196,13 +202,16 @@ const moveRight = () => {
                     array[r][c] = array[r][c]*2;
                     array[r][j] = 0;
                     merged[r][c] = true;
+                    moveHappened = true;
                 } else if (array[r][c-1] === 0 && array[r][c] !== 0) {
                     array[r][c-1] = array[r][j];
                     array[r][j] = 0;
+                    moveHappened = true;
                     break;
                 } else if (array[r][c] === 0) {
                     array[r][c] = array[r][j];
                     array[r][j] = 0;
+                    moveHappened = true;
                 }
             }
         }
@@ -224,13 +233,16 @@ const moveLeft = () => {
                     array[r][c] = array[r][c]*2;
                     array[r][j] = 0;
                     merged[r][c] = true;
+                    moveHappened = true;
                 } else if (array[r][c+1] === 0 && array[r][c] !== 0) {
                     array[r][c+1] = array[r][j];
                     array[r][j] = 0;
+                    moveHappened = true;
                     break;              
                 } else if (array[r][c] === 0) {
                     array[r][c] = array[r][j];
                     array[r][j] = 0; 
+                    moveHappened = true;
                 }
             }
         }
@@ -259,7 +271,9 @@ const keyPress = (event) => {
     }
 
     if (arrowKeyPressed) {
-        addRandomTwoToGrid(array);
+        if (moveHappened) {
+            addRandomTwoToGrid(array);
+        }
         // --- printing array
         for (var i = 0; i < array.length; i++) {
             console.log(array[i].join(" "));
