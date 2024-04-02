@@ -9,9 +9,24 @@ let array = [
 
 let grid = document.querySelector(".game-grid");
 
-const gameWon = (array) => {
-    for (let r = 0; r < array.length;r++) {
-        for (c = 0; c< array.length; c++) {
+const displayChange = (array) => {
+    let refCount = 0;
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
+            refCount++;
+            let element = document.createElement("p");
+            element.textContent = array[r][c] !== 0 ? array[r][c]: "";
+            element.classList.add("item");
+
+            document.getElementById("n"+refCount).remove();
+            element.setAttribute('id',"n"+refCount);
+            document.getElementById("grid").appendChild(element);
+        }
+    }
+}
+function gameWon(array) {
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
             if (array[r][c] >= 2048) {
                 return true;
             }
@@ -68,7 +83,9 @@ const addRandomTwoToGrid = (array) => {
         array[randRow][randCol] = 2;
     } else {
         array[randRow][randCol] = 4;
-    }  
+    }
+    
+    displayChange(array);
 }
 
 const addRandomTwosToGrid = (array) => {
@@ -91,11 +108,11 @@ const addRandomTwosToGrid = (array) => {
     }
 
     array[randRow2][randCol2] = 2;
-    
+
+    displayChange(array);
 }
 
 addRandomTwosToGrid(array);
-
 
 
 
@@ -265,7 +282,7 @@ const moveLeft = () => {
 
 const keyPress = (event) => {
     let arrowKeyPressed = true;
-    if (!gameOver) {
+    if (!gameOver(array)) {
         switch (event.key) {
             case "ArrowDown":
                 moveDown();
@@ -289,7 +306,6 @@ const keyPress = (event) => {
         if (moveHappened && spaceAvailable(array)) {
             addRandomTwoToGrid(array);
         }
-
         if (gameOver(array)) {
             if (gameWon(array)) {
                 gameWonScreen(grid);
