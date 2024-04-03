@@ -71,6 +71,51 @@ main {
     border-radius: 10px;
 }
 
+.two {
+    background-color: #FFBE98;
+}
+
+.four {
+    background-color: #FFAF45;
+}
+
+.eight {
+    background-color: #FFB4B4;
+}
+
+.sixteen {
+    background-color: #FB6D48;
+}
+
+.thirty-two {
+    background-color: #BB8493;
+}
+
+.sixty-four {
+    background-color: #704264;
+}
+
+.oneTwoEight {
+    background-color:#D74B76;
+}
+
+.twoFiveSix {
+    background-color: #AD88C6;
+}
+
+.fiveOneTwo {
+    background-color: #7469B6;
+}
+
+.oneZeroTwoFour {
+    background-color: #673F69;
+}
+
+.twoZeroFourEight {
+    background-color: #A0153E;
+}
+
+
 body {
     
 }
@@ -112,14 +157,21 @@ button {
     font-size: 0.5rem;
 }
 
-.item #2 {
-    
-}
+
 
 .gameOver {
+    opacity: 0.5;
+}
 
+.over {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    top: 50%;
 }
 
 .gamWon {
-    
+    opacity: 0.5;
 }

@@ -1,11 +1,22 @@
-/* Code below initializes the array used for the game
+/*Code below prevents default scroll behaviour of arrow keys.
 */
+window.addEventListener("keydown", function(e) {
+    // Check if arrow key is pressed
+    if([37, 38, 39, 40].includes(e.keyCode)) {
+      // Prevent default behavior
+      e.preventDefault();
+    }
+  }, false);
+
+
 let array = [ 
     [0,0,0,0],
     [0,0,0,0],
     [0,0,0,0],
     [0,0,0,0]   
 ];
+
+array[3][3] = 2048;
 
 let grid = document.querySelector(".game-grid");
 
@@ -17,14 +28,52 @@ const displayChange = (array) => {
             let element = document.createElement("p");
             element.textContent = array[r][c] !== 0 ? array[r][c]: "";
             element.classList.add("item");
-
+            switch (array[r][c]) {
+                case 2:
+                    element.classList.add("two");
+                    break;
+                case 4:
+                    element.classList.add("four");
+                    break;
+                case 8:
+                    element.classList.add("eight");
+                    break;
+                case 16:
+                    element.classList.add("sixteen");
+                    break;
+                case 32:
+                    element.classList.add("thirty-two");
+                    break;
+                case 64:
+                    element.classList.add("sixty-four");
+                    break;
+                case 128:
+                    element.classList.add("oneTwoEight");
+                    break;
+                case 256:
+                    element.classList.add("twoFiveSix");
+                    break;
+                case 512:
+                    element.classList.add("fiveOneTwo");
+                    break;
+                case 1024:
+                    element.classList.add("oneZeroTwoFour");
+                    break;
+                case 2048:
+                    element.classList.add("twoZeroFourEight");
+                    break;
+                default:
+                    element.classList.add("greater");
+                    break;
+            }
+            
             document.getElementById("n"+refCount).remove();
             element.setAttribute('id',"n"+refCount);
             document.getElementById("grid").appendChild(element);
         }
     }
 }
-function gameWon(array) {
+const gameWon = (array) => {
     for (let r = 0; r < array.length; r++) {
         for (c = 0; c < array.length; c++) {
             if (array[r][c] >= 2048) {
@@ -139,6 +188,7 @@ for (var i = 0; i < array.length; i++) {
 
 // reset function prepares grid for new game
 const reset = (Refarray) => {
+    
     for (let i = 0; i < Refarray.length; i ++) {
         for (let j = 0; j < Refarray.length; j++) {
             Refarray[i][j] = 0;
@@ -146,11 +196,30 @@ const reset = (Refarray) => {
     
     }
 
-    addRandomTwosToGrid(array);
+    
 
     for (var i = 0; i < Refarray.length; i++) {
         console.log(Refarray[i].join(" "));
     }
+    
+    grid.classList.remove("gameOver");
+    grid.classList.remove("gameWon");
+
+    let elem = document.getElementById("GO");
+    let elem2 = document.getElementById("GW");
+
+    if (elem) {
+        elem.remove();
+    }
+
+    if (elem2) {
+        elem2.remove();
+    }
+    
+
+    addRandomTwosToGrid(array);
+    /*displayChange(array)*/
+
 } //reset
 
 let moveHappened = false;
@@ -159,6 +228,13 @@ let moveHappened = false;
  * bottom to top.
 */
 const moveDown = () => {
+    
+    let before = "";
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
+            before +=array[r][c];
+        }
+    }
     let merged = Array.from({ length: array.length }, () => Array(array.length).fill(false));
     for (let c = 0; c < array.length; c++) {
         for (let r = array.length - 1; r >= 0; r--) {
@@ -170,19 +246,30 @@ const moveDown = () => {
                     array[r][c] = array[r][c] * 2;
                     array[i][c] = 0;
                     merged[r][c] = true;
-                    moveHappened = true;
+                    
                 } else if (array[r-1][c] === 0 && array[r][c] !== 0) {
                     array[r-1][c] = array[i][c];
                     array[i][c] = 0;
-                    moveHappened = true;
+                    
                     break;
                 } else if (array[r][c] === 0) {
                     array[r][c] = array[i][c];
                     array[i][c] = 0;
-                    moveHappened = true;
+                    
                 }
             }
         }
+    }
+    let after = "";
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
+            after +=array[r][c];
+        }
+    }
+    if (before === after) {
+        moveHappened = false;
+    } else {
+        moveHappened = true;
     }
 }
 
@@ -190,6 +277,13 @@ const moveDown = () => {
  * bottom to top.
 */
 const moveUp = () => {
+    
+    let before = "";
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
+            before +=array[r][c];
+        }
+    }
     let merged = Array.from({ length: array.length }, () => Array(array.length).fill(false));
     for (let c = 0; c < array.length; c++) {
         for (let r = 0; r < array.length; r++) {
@@ -201,26 +295,44 @@ const moveUp = () => {
                     array[r][c] = array[r][c] * 2;
                     array[i][c] = 0;
                     merged[r][c] = true;
-                    moveHappened = true;
+                    
                 } else if (array[r+1][c] === 0 && array[r][c] !== 0) {
                     array[r+1][c] = array[i][c];
                     array[i][c] = 0;
-                    moveHappened = true;
+                    
                     break;
                 } else if (array[r][c] === 0) {
                     array[r][c] = array[i][c];
                     array[i][c] = 0;
-                    moveHappened = true;
+                    
                 }
             }
         }
-    }    
+    }
+    let after = "";
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
+            after +=array[r][c];
+        }
+    }
+    if (before === after) {
+        moveHappened = false;
+    } else {
+        moveHappened = true;
+    }  
 } // moveUp
 
 /* Shifts numbers in grid from 
  * left to right.
 */
 const moveRight = () => {
+    
+    let before = "";
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
+            before +=array[r][c];
+        }
+    }
     let merged = Array.from({ length: array.length }, () => Array(array.length).fill(false));
     for (let r = 0; r < array.length; r++) {
         for (let c = array.length-1; c >= 0; c--) {
@@ -232,19 +344,30 @@ const moveRight = () => {
                     array[r][c] = array[r][c]*2;
                     array[r][j] = 0;
                     merged[r][c] = true;
-                    moveHappened = true;
+                    
                 } else if (array[r][c-1] === 0 && array[r][c] !== 0) {
                     array[r][c-1] = array[r][j];
                     array[r][j] = 0;
-                    moveHappened = true;
+                    
                     break;
                 } else if (array[r][c] === 0) {
                     array[r][c] = array[r][j];
                     array[r][j] = 0;
-                    moveHappened = true;
+                    
                 }
             }
         }
+    }
+    let after = "";
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
+            after +=array[r][c];
+        }
+    }
+    if (before === after) {
+        moveHappened = false;
+    } else {
+        moveHappened = true;
     }
 } // moveRight
 
@@ -252,6 +375,13 @@ const moveRight = () => {
  * right to left.
 */
 const moveLeft = () => {
+    
+    let before = "";
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
+            before +=array[r][c];
+        }
+    }
     let merged = Array.from({ length: array.length }, () => Array(array.length).fill(false));
     for (let r = 0; r < array.length; r++) {
         for (let c = 0; c < array.length; c++) {
@@ -259,29 +389,42 @@ const moveLeft = () => {
                 if (array[r][j] === 0) {
                     continue;
                 }
-                if (array[r][c] === array[r][j] && !merged[r][c] && !merged[r][j] && (array[r][j] === array[r][c+1] || (array[r][j] === array[r][c+2] && array[r][c+1] === 0) || (array[r][j] === array[r][c+3] && array[r][c+1] === 0 && array[r][c+2] === 0) )) {
+                if (array[r][c] === array[r][j] && !merged[r][c] && !merged[r][j] && (array[r][j] === array[r][c+1] || (array[r][j] === array[r][c+2] && array[r][c+1] === 0) || (array[r][j] === array[r][c+3] && array[r][c+1] === 0 && array[r][c+2] === 0))) {
                     array[r][c] = array[r][c]*2;
                     array[r][j] = 0;
                     merged[r][c] = true;
-                    moveHappened = true;
                 } else if (array[r][c+1] === 0 && array[r][c] !== 0) {
                     array[r][c+1] = array[r][j];
                     array[r][j] = 0;
-                    moveHappened = true;
                     break;              
                 } else if (array[r][c] === 0) {
                     array[r][c] = array[r][j];
                     array[r][j] = 0; 
-                    moveHappened = true;
+                    
                 }
             }
         }
+    }
+    let after = "";
+    for (let r = 0; r < array.length; r++) {
+        for (c = 0; c < array.length; c++) {
+            after +=array[r][c];
+        }
+    }
+    if (before === after) {
+        moveHappened = false;
+    } else {
+        moveHappened = true;
     }
 } // moveLeft
 
 
 const keyPress = (event) => {
     let arrowKeyPressed = true;
+    if (gameOver(array)) {
+        arrowKeyPressed = false;
+    }
+    
     if (!gameOver(array)) {
         switch (event.key) {
             case "ArrowDown":
@@ -305,6 +448,7 @@ const keyPress = (event) => {
     if (arrowKeyPressed) {
         if (moveHappened && spaceAvailable(array)) {
             addRandomTwoToGrid(array);
+            
         }
         if (gameOver(array)) {
             if (gameWon(array)) {
@@ -312,6 +456,10 @@ const keyPress = (event) => {
             } else {
                 gameOverScreen(grid);
             }
+        }
+
+        if (gameWon(array)) {
+            gameWonScreen(grid);
         }
 
         // --- printing array
@@ -325,10 +473,19 @@ const keyPress = (event) => {
 
 const gameOverScreen = (grid) => {
     grid.classList.add("gameOver");
+    let element = document.createElement("p");
+    element.textContent = "GAME OVER";
+    element.classList.add("over");
+    element.setAttribute('id',"GO");
+    document.getElementById("main").appendChild(element);
 }
 
 const gameWonScreen  = (grid) => {
     grid.classList.add("gameWon");
+    element.textContent = "YOU WON!";
+    element.classList.add("over");
+    element.setAttribute('id',"GW");
+    document.getElementById("main").appendChild(element);
 }
 
 let button = document.getElementById("button");
