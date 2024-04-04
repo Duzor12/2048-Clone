@@ -16,7 +16,7 @@ let array = [
     [0,0,0,0]   
 ];
 
-array[3][3] = 2048;
+
 
 let grid = document.querySelector(".game-grid");
 
@@ -103,6 +103,10 @@ const gameOver = (array) => {
                 return false;
             }
         }
+    }
+
+    if (spaceAvailable(array)) {
+        return false;
     }
 
     return true;
@@ -421,7 +425,7 @@ const moveLeft = () => {
 
 const keyPress = (event) => {
     let arrowKeyPressed = true;
-    if (gameOver(array)) {
+    if (gameOver(array) || gameWon(array)) {
         arrowKeyPressed = false;
     }
     
@@ -482,6 +486,7 @@ const gameOverScreen = (grid) => {
 
 const gameWonScreen  = (grid) => {
     grid.classList.add("gameWon");
+    let element = document.createElement("p");
     element.textContent = "YOU WON!";
     element.classList.add("over");
     element.setAttribute('id',"GW");
