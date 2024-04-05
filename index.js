@@ -8,6 +8,10 @@ window.addEventListener("keydown", function(e) {
     }
   }, false);
 
+  window.addEventListener("touchmove", function(e) {
+    // Prevent default behavior
+    e.preventDefault();
+}, { passive: false });
 
 let array = [ 
     [0,0,0,0],
