@@ -474,6 +474,68 @@ const keyPress = (event) => {
 
     }
 } //keyPress
+function touchMove(event) {
+    let arrowTouchDetected = true;
+    if (gameOver(array) || gameWon(array)) {
+        arrowTouchDetected = false;
+    }
+    
+    if (!gameOver(array)) {
+        const touchX = event.changedTouches[0].clientX;
+        const touchY = event.changedTouches[0].clientY;
+        const startX = touchStartX;
+        const startY = touchStartY;
+        const deltaX = touchX - startX;
+        const deltaY = touchY - startY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX > 0) {
+                moveRight();
+            } else {
+                moveLeft();
+            }
+        } else {
+            if (deltaY > 0) {
+                moveDown();
+            } else {
+                moveUp();
+            }
+        }
+    }
+
+    if (arrowTouchDetected) {
+        if (moveHappened && spaceAvailable(array)) {
+            addRandomTwoToGrid(array);
+        }
+
+        if (gameOver(array)) {
+            if (gameWon(array)) {
+                gameWonScreen(grid);
+            } else {
+                gameOverScreen(grid);
+            }
+        }
+
+        if (gameWon(array)) {
+            gameWonScreen(grid);
+        }
+
+        // Printing array
+        for (let i = 0; i < array.length; i++) {
+            console.log(array[i].join(" "));
+        }
+    }
+}
+
+let touchStartX, touchStartY;
+
+function touchStart(event) {
+    const touch = event.changedTouches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+}
+
+
 
 const gameOverScreen = (grid) => {
     grid.classList.add("gameOver");
@@ -500,8 +562,6 @@ button.addEventListener("click", function () {
 
 document.addEventListener('keydown',keyPress);
 
-
-
-
-
+document.addEventListener('touchstart', touchStart);
+document.addEventListener('touchend', touchMove);
 
