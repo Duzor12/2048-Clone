@@ -203,6 +203,12 @@ button {
         width: 100px;
         font-size: 0.3rem;
     }
+
+    .over {
+        top: 40%;
+    }
+
+
     
     
 }
@@ -230,6 +236,11 @@ button {
 
     footer {
         display: none;
+    }
+
+    .over {
+        font-size: 1rem;
+        
     }
         
 }
